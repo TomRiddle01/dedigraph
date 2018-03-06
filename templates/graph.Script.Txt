@@ -1,0 +1,86 @@
+//Script for generating a clock in the pyplanet interface
+#Include "TextLib" as TextLib
+#Include "MathLib" as MathLib
+
+
+main() {
+
+    {% if cptimes is defined%}
+
+    declare Real[][Text] _Times;
+
+    {% for key, value in cptimes.items() %}
+    _Times["{{key}}"] = [{{value}}];
+    {% endfor %}
+
+    declare Real[] empty;
+    _Times["$$live"] = empty;
+
+    {% for i in range(num_checkpoints) %}
+    _Times["$$live"].add(0.0);
+    {% endfor %}
+
+    while (True) {
+        yield;
+        if (!PageIsVisible || InputPlayer == Null) {
+            continue;
+        }
+        
+
+        declare diffs = True;
+        declare Real[][Text] Times;
+
+
+        if(diffs){
+            foreach(Run => CpTimes in _Times){
+                Times[Run] = CpTimes;
+            }
+        }else{
+            declare Real last;
+
+            foreach(Run => CpTimes in _Times){
+                last = 0.0;
+                foreach(Time in CpTimes){
+                    Times[Run].add(Time - last);
+                    last = Time;
+                }
+            }
+        }
+
+        declare Max = 0.;
+        foreach(Run => CpTimes in _Times){
+            foreach (Time in CpTimes) {
+                if(Max < Time){
+                    Max = Time;
+                }
+            }
+        }
+
+        declare Integer i;
+        foreach(Run => CpTimes in _Times){
+            i = 0;
+            foreach (Time in CpTimes) {
+                declare CMlQuad Pin <=> (Page.GetFirstChild("time_"^Run^"_"^TextLib::ToText(i)) as CMlQuad);
+                if(Pin != Null){
+                    if(Time != 0.0){
+                        Pin.Show();
+                    }else{
+                        Pin.Hide();
+                    }
+                    Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
+                    i+=1;
+                }
+            }
+        }
+
+        foreach (Event in RaceEvents) {
+            if (Event.Type == CTmRaceClientEvent::EType::WayPoint){
+                if(Event.Player == InputPlayer){
+                    _Times["$$live"][Event.CheckpointInRace] = Event.RaceTime*1.0;
+                }
+            }
+        }
+    }
+    {% endif %}
+}
+
