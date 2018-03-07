@@ -120,10 +120,10 @@ class DediGraphApp(AppConfig):
             record = self.local_records.current_records[0]
             if type(record.checkpoints) is str:
                 cps = record.checkpoints.split(",")
-                await self.widget.update_times("dedi_first", player, cps)
+                await self.widget.update_times("local_first", player, cps)
             elif type(record.checkpoints) is list:
                 cps = record.checkpoints
-                await self.widget.update_times("dedi_first", player, cps)
+                await self.widget.update_times("local_first", player, cps)
 
     async def load_dedi_graph(self, player, **kwagrs):
         num_records = len(self.dedimania.current_records)
