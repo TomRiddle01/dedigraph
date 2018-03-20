@@ -95,7 +95,7 @@ main() {
             }
         }
 
-        declare Max = 0.;
+        declare Max = 0.00001;
         foreach(Run => CpTimes in Times){
             if(!hide.exists(Run)){
                 foreach (Time in CpTimes) {
