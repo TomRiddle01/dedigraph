@@ -1,12 +1,12 @@
 {% extends 'core.views/generics/widget.xml' %}
 
 {% block maniascript %}
-    <script><!--{% include 'dedigraph/graph.Script.Txt' %}--></script>
 {% endblock %}
 
 {% block content %}
+    <script><!--{% include 'dedigraph/graph.Script.Txt' %}--></script>
 
-    {% if cptimes is defined%}
+    {% if cptimes is defined %}
     <frame scale="0.25">
         <quad pos="0 100" z-index="-5" size="250 100" bgcolor="00000070"/>
 

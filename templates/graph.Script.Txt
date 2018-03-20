@@ -88,6 +88,16 @@ main() {
             }
         }
 
+
+        declare Integer j;
+        foreach(Time in GUIPlayer.CurRace.Checkpoints){
+            _Times["$$live"][j] = Time * 1.0;
+            j+=1;
+        }
+        if(_Times["$$live"].count > GUIPlayer.CurRace.Checkpoints.count){
+            _Times["$$live"][GUIPlayer.CurRace.Checkpoints.count] = GUIPlayer.CurRace.Time*1.0;
+        }
+
         declare Integer i;
         foreach(Run => CpTimes in _Times){
             i = 0;
@@ -101,14 +111,6 @@ main() {
                     }
                     Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
                     i+=1;
-                }
-            }
-        }
-
-        foreach (Event in RaceEvents) {
-            if (Event.Type == CTmRaceClientEvent::EType::WayPoint){
-                if(Event.Player == GUIPlayer){
-                    _Times["$$live"][Event.CheckpointInRace] = Event.RaceTime*1.0;
                 }
             }
         }
