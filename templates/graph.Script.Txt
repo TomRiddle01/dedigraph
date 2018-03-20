@@ -97,9 +97,11 @@ main() {
 
         declare Max = 0.;
         foreach(Run => CpTimes in Times){
-            foreach (Time in CpTimes) {
-                if(Max < Time){
-                    Max = Time;
+            if(!hide.exists(Run)){
+                foreach (Time in CpTimes) {
+                    if(Max < Time){
+                        Max = Time;
+                    }
                 }
             }
         }
