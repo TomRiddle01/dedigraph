@@ -1,7 +1,10 @@
 {% extends 'core.views/generics/widget.xml' %}
 
-{% block content %}
+{% block maniascript %}
     <script><!--{% include 'dedigraph/graph.Script.Txt' %}--></script>
+{% endblock %}
+
+{% block content %}
 
     {% if cptimes is defined%}
     <frame scale="0.25">

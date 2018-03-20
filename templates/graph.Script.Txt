@@ -3,7 +3,13 @@
 #Include "MathLib" as MathLib
 
 
+
+
+
 main() {
+
+    declare Boolean Prev_DistractionFreeMode = False;
+    declare netwrite Boolean Net_DistractionFreeMode for UI;
 
     {% if cptimes is defined%}
 
@@ -20,12 +26,38 @@ main() {
     _Times["$$live"].add(0.0);
     {% endfor %}
 
+    if (Net_DistractionFreeMode == True) {
+        Page.GetClassChildren("distraction-hide", Page.MainFrame, True);
+        foreach (Control in Page.GetClassChildren_Result) {
+            Control.Hide();
+        }
+    }
+
+
     while (True) {
         yield;
-        if (!PageIsVisible || InputPlayer == Null) {
+
+
+        if (Prev_DistractionFreeMode != Net_DistractionFreeMode) {
+            Prev_DistractionFreeMode = Net_DistractionFreeMode;
+
+            if (Net_DistractionFreeMode == True) {
+                Page.GetClassChildren("distraction-hide", Page.MainFrame, True);
+                foreach (Control in Page.GetClassChildren_Result) {
+                    Control.Hide();
+                }
+            } else {
+                Page.GetClassChildren("distraction-hide", Page.MainFrame, True);
+                foreach (Control in Page.GetClassChildren_Result) {
+                    Control.Show();
+                }
+            }
+        }
+
+        if (!PageIsVisible || GUIPlayer == Null) {
             continue;
         }
-        
+
 
         declare diffs = True;
         declare Real[][Text] Times;
@@ -75,7 +107,7 @@ main() {
 
         foreach (Event in RaceEvents) {
             if (Event.Type == CTmRaceClientEvent::EType::WayPoint){
-                if(Event.Player == InputPlayer){
+                if(Event.Player == GUIPlayer){
                     _Times["$$live"][Event.CheckpointInRace] = Event.RaceTime*1.0;
                 }
             }
