@@ -8,24 +8,29 @@
 
     {% if cptimes is defined %}
     <frame scale="0.25">
-        <quad pos="0 100" z-index="-5" size="250 100" bgcolor="00000070"/>
+        <quad ScriptEvents="1" id="graphbg" pos="0 100" z-index="-5" size="250 100" bgcolor="00000070"/>
 
                 <quad pos="0 0" halign="center" valign="bottom" z-index="10" size="1 100" bgcolor="ffffff11"/>
             {% for time in range(num_checkpoints)  %}
                 <quad pos="{{ (loop.index * (250/num_checkpoints)) }} 0" halign="center" valign="bottom" z-index="10" size="1 100" bgcolor="ffffff11"/>
 
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} -2000" id="time_dedi_first_{{loop.index0}}" valign="center" z-index="0" size="{{250/num_checkpoints}} 1" bgcolor="ff8000ff"/>
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} -2000" id="time_local_first_{{loop.index0}}" valign="center" z-index="0" size="{{250/num_checkpoints}} 1" bgcolor="ffff00ff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_dedi_first_{{loop.index0}}" valign="bottom" z-index="5" size="{{250/num_checkpoints}} 0" bgcolor="ff8000ff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_local_first_{{loop.index0}}" valign="bottom" z-index="4" size="{{250/num_checkpoints}} 0" bgcolor="ffff00ff"/>
 
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} -2000" id="time_other_dedi_{{loop.index0}}" valign="center" z-index="0" size="{{250/num_checkpoints}} 1" bgcolor="0000ffff"/>
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} -2000" id="time_other_local_{{loop.index0}}" valign="center" z-index="0" size="{{250/num_checkpoints}} 1" bgcolor="8888ffff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_other_dedi_{{loop.index0}}" valign="bottom" z-index="3" size="{{250/num_checkpoints}} 0" bgcolor="0000ffff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_other_local_{{loop.index0}}" valign="bottom" z-index="2" size="{{250/num_checkpoints}} 0" bgcolor="8888ffff"/>
 
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} -2000" id="time_own_dedi_{{loop.index0}}" valign="center" z-index="2" size="{{250/num_checkpoints}} 1" bgcolor="9999999ffff"/>
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} -2000" id="time_own_local_{{loop.index0}}" valign="center" z-index="1" size="{{250/num_checkpoints}} 1" bgcolor="cccccc"/>
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} -2000" id="time_$$live_{{loop.index0}}" valign="center" z-index="3" size="{{250/num_checkpoints}} 1" bgcolor="ff0000ff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_own_dedi_{{loop.index0}}" valign="bottom" z-index="1" size="{{250/num_checkpoints}} 0" bgcolor="9999999ffff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_own_local_{{loop.index0}}" valign="bottom" z-index="0" size="{{250/num_checkpoints}} 0" bgcolor="ccccccff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_$$live_{{loop.index0}}" valign="bottom" z-index="7" size="{{250/num_checkpoints}} 0" bgcolor="ff0000ff"/>
             {% endfor %}
-        <label pos="0 99" halign="left" valign="top" textsize="7" text="$s$f80Dedi 1   $ff0Local 1   $999your Dedi   $cccyour Local   $f00live"/>
-        <label pos="1 -4" halign="left" valign="top" textsize="7" style="TextTitle2" text="$s Give me feedback on Discord!" url="https://discord.gg/7r226pF"/>
+        <label pos="0 -4" ScriptEvents="1" id="dedi_first" halign="left" valign="top" textsize="7" text="$s$f80Dedi 1"/>
+        <label pos="30 -4" ScriptEvents="1" id="local_first" halign="left" valign="top" textsize="7" text="$s$ff0Local 1"/>
+        <label pos="60 -4" ScriptEvents="1" id="own_dedi" halign="left" valign="top" textsize="7" text="$s$999your Dedi"/>
+        <label pos="100 -4" ScriptEvents="1" id="own_local" halign="left" valign="top" textsize="7" text="$s$cccyour Local"/>
+        <label pos="60 -2000" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$999other Dedi"/>
+        <label pos="100 -2000" ScriptEvents="1" id="other_local" halign="left" valign="top" textsize="7" text="$s$cccother Local"/>
+        <label pos="145 -4" ScriptEvents="1" id="$$live" halign="left" valign="top" textsize="7" text="$s$f00live"/>
     </frame>
     {% endif %}
 {% endblock %}
