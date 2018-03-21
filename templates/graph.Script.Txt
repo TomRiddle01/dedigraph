@@ -65,6 +65,10 @@ main() {
         }
 
 
+        {% for i in range(num_checkpoints) %}
+            _Times["$$live"][{{i}}] = 0.0;
+        {% endfor %}
+
         declare Integer j;
         foreach(Time in GUIPlayer.CurRace.Checkpoints){
             _Times["$$live"][j] = Time * 1.0;
@@ -141,6 +145,13 @@ main() {
                     }
 
                     i+=1;
+                }
+                if(Run == "$$live"){
+                    if(i == GUIPlayer.CurRace.Checkpoints.count+1){
+                        Pin.BgColor = <1.0, 0.5, 0.5>;
+                    }else{
+                        Pin.BgColor = <1.0, 0.0, 0.0>;
+                    }
                 }
             }
         }
