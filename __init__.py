@@ -29,11 +29,12 @@ class DediGraphApp(AppConfig):
     async def on_start(self):
         await super().on_start()
 
+        self.context.signals.listen(mp_signals.ui.manialink_answer, self.compare_click)
         self.context.signals.listen(mp_signals.map.map_start, self.reset_widget)
         self.context.signals.listen(tm_signals.start_countdown, self.display_graph)
 
         await self.instance.command_manager.register(
-            Command(command='compare', target=self.compare).add_param('playerlogin', nargs='1', type=str, required=True, help='Playerlogin to compare to. (Will be plotted in blue.)'),
+            Command(command='compare', target=self.compare_chat).add_param('playerlogin', nargs='1', type=str, required=True, help='Playerlogin to compare to. (Will be plotted in blue.)'),
         )
 
         self.widget = GraphView(self)
@@ -57,14 +58,23 @@ class DediGraphApp(AppConfig):
         else:
             self.dedimania = self.instance.apps.apps["dedimania"]
 
-    async def compare(self, player, data, **kwargs):
-        await self.load_selected_player_graph(data.playerlogin, player)
-        await self.instance.chat("You are now comparing to "+data.playerlogin+" (displayed in blue).", player.login)
+        await self.widget.reset(self.instance.map_manager.current_map.num_checkpoints)
+
+    async def compare_click(self, player, action, **kwargs):
+        if action.startswith("records_widget_"):
+            target = action.replace("records_widget_", "")
+            await self.compare(player, target)
+
+    async def compare_chat(self, player, data, **kwargs):
+        await self.compare(player, data.playerlogin)
+
+    async def compare(self, player, target, **kwargs):
+        await self.load_selected_player_graph(target, player)
         await self.display_graph(player)
 
 
-    async def reset_widget(self, **kwargs):
-        await self.widget.reset()
+    async def reset_widget(self, map, **kwargs):
+        await self.widget.reset(map.num_checkpoints)
 
     async def display_graph(self, player, **kwargs):
         await self.load_dedi_graph(player)
@@ -73,24 +83,32 @@ class DediGraphApp(AppConfig):
         await self.widget.display(player=player.login)
 
     async def load_selected_player_graph(self, selected_player, player, **kwagrs):
+        cps = None
+        nickname = None
         for record in self.dedimania.current_records:
             if record.login == selected_player:
-                cps = []
                 if type(record.cps) is str:
                     cps = record.cps.split(",")
                 elif type(record.cps) is list:
                     cps = record.cps
+                nickname = record.nickname
+        await self.widget.update_times("other_dedi", player, cps)
 
-                await self.widget.update_times("other_dedi", player, cps)
-
+        cps = None
         for record in self.local_records.current_records:
             if record.player.login == selected_player:
-                cps = []
                 if type(record.checkpoints) is str:
                     cps = record.checkpoints.split(",")
                 elif type(record.checkpoints) is list:
                     cps = record.checkpoints
-                await self.widget.update_times("other_local", player, cps)
+                nickname = record.player.nickname
+        await self.widget.update_times("other_local", player, cps)
+
+        if nickname:
+            await self.widget.update_other_nick(player, nickname)
+            await self.instance.chat("You are now comparing to "+nickname+"$z (displayed in blue).", player.login)
+        else:
+            await self.instance.chat("No records found for " + selected_player, player.login)
 
     async def display_own_records_graph(self, player, **kwagrs):
         for record in self.dedimania.current_records:

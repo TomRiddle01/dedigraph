@@ -18,18 +18,27 @@
                 <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_local_first_{{loop.index0}}" valign="bottom" z-index="4" size="{{250/num_checkpoints}} 0" bgcolor="ffff00ff"/>
 
                 <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_other_dedi_{{loop.index0}}" valign="bottom" z-index="3" size="{{250/num_checkpoints}} 0" bgcolor="0000ffff"/>
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_other_local_{{loop.index0}}" valign="bottom" z-index="2" size="{{250/num_checkpoints}} 0" bgcolor="8888ffff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_other_local_{{loop.index0}}" valign="bottom" z-index="2" size="{{250/num_checkpoints}} 0" bgcolor="3333ffff"/>
 
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_own_dedi_{{loop.index0}}" valign="bottom" z-index="1" size="{{250/num_checkpoints}} 0" bgcolor="9999999ffff"/>
-                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_own_local_{{loop.index0}}" valign="bottom" z-index="0" size="{{250/num_checkpoints}} 0" bgcolor="ccccccff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_own_dedi_{{loop.index0}}" valign="bottom" z-index="1" size="{{250/num_checkpoints}} 0" bgcolor="ffffffff"/>
+                <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_own_local_{{loop.index0}}" valign="bottom" z-index="0" size="{{250/num_checkpoints}} 0" bgcolor="ffffffff"/>
                 <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_$$live_{{loop.index0}}" valign="bottom" z-index="7" size="{{250/num_checkpoints}} 0" bgcolor="ff0000ff"/>
             {% endfor %}
         <label pos="0 -4" ScriptEvents="1" id="dedi_first" halign="left" valign="top" textsize="7" text="$s$f80Dedi 1"/>
         <label pos="30 -4" ScriptEvents="1" id="local_first" halign="left" valign="top" textsize="7" text="$s$ff0Local 1"/>
-        <label pos="60 -4" ScriptEvents="1" id="own_dedi" halign="left" valign="top" textsize="7" text="$s$999your Dedi"/>
-        <label pos="100 -4" ScriptEvents="1" id="own_local" halign="left" valign="top" textsize="7" text="$s$cccyour Local"/>
-        <label pos="60 -2000" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$999other Dedi"/>
-        <label pos="100 -2000" ScriptEvents="1" id="other_local" halign="left" valign="top" textsize="7" text="$s$cccother Local"/>
+        <label pos="60 -4" ScriptEvents="1" id="own_dedi" halign="left" valign="top" textsize="7" text="$s$fffyour Dedi"/>
+        <label pos="100 -4" ScriptEvents="1" id="own_local" halign="left" valign="top" textsize="7" text="$s$fffyour Local"/>
+
+        {% if other_nick is defined %}
+            <label pos="0 -14" halign="left" valign="top" size="80 10" textsize="7" text="{{other_nick}}$z:"/>
+        {% endif %}
+        {% if "other_dedi" in cptimes %}
+        <label pos="90 -14" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$00fDedi"/>
+        {% endif %}
+        {% if "other_local" in cptimes %}
+        <label pos="90 -14" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$00fDedi"/>
+            <label pos="120 -14" ScriptEvents="1" id="other_local" halign="left" valign="top" textsize="7" text="$s$33fLocal"/>
+        {% endif %}
         <label pos="145 -4" ScriptEvents="1" id="$$live" halign="left" valign="top" textsize="7" text="$s$f00live"/>
     </frame>
     {% endif %}

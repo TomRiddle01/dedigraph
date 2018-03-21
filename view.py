@@ -29,13 +29,25 @@ class GraphView(WidgetView):
         if player.login not in self.player_data:
             self.player_data[player.login] = {"cptimes": {}}
         
-    async def reset(self):
+    async def reset(self, num_checkpoints):
         self.player_data = {}
-        self.checkpoints = 0
+        self.checkpoints = num_checkpoints
+
+    async def update_other_nick(self, player, nick):
+        self.create_if_not_exists(player)
+        self.player_data[player.login]["other_nick"] = nick
+
 
     async def update_times(self, type, player, times):
         self.create_if_not_exists(player)
-        self.player_data[player.login]["cptimes"][type] = ",".join(map(str, map(float, times)))
+
+        if times is None:
+            if type in self.player_data[player.login]["cptimes"]:
+                del self.player_data[player.login]["cptimes"][type]
+
+        elif len(times) == self.checkpoints and len(times) > 0:
+            print(type, times)
+            self.player_data[player.login]["cptimes"][type] = ",".join(map(str, map(float, times)))
 
     async def get_context_data(self):
         context = await super().get_context_data()

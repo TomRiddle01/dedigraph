@@ -109,10 +109,12 @@ main() {
         declare Runs = ["dedi_first", "local_first", "own_dedi", "own_local", "$$live", "other_dedi", "other_local"];
         foreach(Run in Runs){
             declare CMlLabel Label <=> (Page.GetFirstChild(Run) as CMlLabel);
-            if(!hide.exists(Run)){
-                Label.Opacity = 1.0;
-            }else{
-                Label.Opacity = 0.4;
+            if(Label != Null){
+                if(!hide.exists(Run)){
+                    Label.Opacity = 1.0;
+                }else{
+                    Label.Opacity = 0.4;
+                }
             }
         }
 
@@ -125,17 +127,19 @@ main() {
                 if(Pin != Null){
                     if(Time != 0.0 && !hide.exists(Run)){
                         Pin.Show();
+                        if(lines){
+                            Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
+                            Pin.Size.Y = 1.0;
+                            Pin.Opacity = 1.0;
+                        }else{
+                            Pin.RelativePosition_V3.Y = 0.0;
+                            Pin.Size.Y = Time * 100 / Max * 0.9;
+                            Pin.Opacity = 0.4;
+                        }
                     }else{
                         Pin.Hide();
                     }
 
-                    if(lines){
-                        Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
-                        Pin.Size.Y = 1.0;
-                    }else{
-                        Pin.RelativePosition_V3.Y = 0.0;
-                        Pin.Size.Y = Time * 100 / Max * 0.9;
-                    }
                     i+=1;
                 }
             }
