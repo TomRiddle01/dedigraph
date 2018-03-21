@@ -46,7 +46,6 @@ class GraphView(WidgetView):
                 del self.player_data[player.login]["cptimes"][type]
 
         elif len(times) == self.checkpoints and len(times) > 0:
-            print(type, times)
             self.player_data[player.login]["cptimes"][type] = ",".join(map(str, map(float, times)))
 
     async def get_context_data(self):
