@@ -34,7 +34,9 @@ class DediGraphApp(AppConfig):
         self.context.signals.listen(tm_signals.start_countdown, self.display_graph)
 
         await self.instance.command_manager.register(
-            Command(command='compare', target=self.compare_chat).add_param('playerlogin', nargs='1', type=str, required=True, help='Playerlogin to compare to. (Will be plotted in blue.)'),
+            Command(command='compare',
+                    target=self.compare_chat).add_param('playerlogin', nargs='1', type=str, required=True,
+                                                        help='Playerlogin to compare to. (Will be plotted in blue.)'),
         )
 
         self.widget = GraphView(self)
@@ -58,7 +60,7 @@ class DediGraphApp(AppConfig):
         else:
             self.dedimania = self.instance.apps.apps["dedimania"]
 
-        await self.widget.reset(self.instance.map_manager.current_map.num_checkpoints)
+        await self.reset_widget()
 
     async def compare_click(self, player, action, **kwargs):
         if action.startswith("records_widget_"):
@@ -72,9 +74,12 @@ class DediGraphApp(AppConfig):
         await self.load_selected_player_graph(target, player)
         await self.display_graph(player)
 
+    async def reset_widget(self, **kwargs):
+        await self.widget.reset(self.instance.map_manager.current_map.num_checkpoints)
+        for player in self.instance.player_manager.online:
+            self.display_graph(player)
 
-    async def reset_widget(self, map, **kwargs):
-        await self.widget.reset(map.num_checkpoints)
+
 
     async def display_graph(self, player, **kwargs):
         await self.load_dedi_graph(player)
