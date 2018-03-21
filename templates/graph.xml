@@ -33,10 +33,9 @@
             <label pos="0 -14" halign="left" valign="top" size="80 10" textsize="7" text="{{other_nick}}$z:"/>
         {% endif %}
         {% if "other_dedi" in cptimes %}
-        <label pos="90 -14" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$00fDedi"/>
+            <label pos="90 -14" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$00fDedi"/>
         {% endif %}
         {% if "other_local" in cptimes %}
-        <label pos="90 -14" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$00fDedi"/>
             <label pos="120 -14" ScriptEvents="1" id="other_local" halign="left" valign="top" textsize="7" text="$s$33fLocal"/>
         {% endif %}
         <label pos="145 -4" ScriptEvents="1" id="$$live" halign="left" valign="top" textsize="7" text="$s$f00live"/>
