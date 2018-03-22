@@ -164,7 +164,6 @@ main() {
                 }else{
                     if(hide.exists(Event.ControlId)){
                         hide.remove(Event.ControlId);
-                        log(Event.ControlId);
                     }else{
                         hide.add(Event.ControlId);
                     }

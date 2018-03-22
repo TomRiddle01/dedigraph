@@ -53,7 +53,7 @@ class GraphView(WidgetView):
 
         # Add facts.
         context.update({
-            'num_checkpoints': self.app.instance.map_manager.current_map.num_checkpoints,
+            'num_checkpoints': self.checkpoints,
         })
 
         return context

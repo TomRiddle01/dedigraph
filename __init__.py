@@ -30,7 +30,7 @@ class DediGraphApp(AppConfig):
         await super().on_start()
 
         self.context.signals.listen(mp_signals.ui.manialink_answer, self.compare_click)
-        self.context.signals.listen(mp_signals.map.map_start, self.reset_widget)
+        self.context.signals.listen(mp_signals.map.map_start, self.map_start)
         self.context.signals.listen(tm_signals.start_countdown, self.display_graph)
 
         await self.instance.command_manager.register(
@@ -73,6 +73,11 @@ class DediGraphApp(AppConfig):
     async def compare(self, player, target, **kwargs):
         await self.load_selected_player_graph(target, player)
         await self.display_graph(player)
+
+    async def map_start(self, map, **kwargs):
+        await self.widget.reset(map.num_checkpoints)
+        for player in self.instance.player_manager.online:
+            self.display_graph(player)
 
     async def reset_widget(self, **kwargs):
         await self.widget.reset(self.instance.map_manager.current_map.num_checkpoints)
