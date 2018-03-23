@@ -77,12 +77,12 @@ class DediGraphApp(AppConfig):
     async def map_start(self, map, **kwargs):
         await self.widget.reset(map.num_checkpoints)
         for player in self.instance.player_manager.online:
-            self.display_graph(player)
+            await self.display_graph(player)
 
     async def reset_widget(self, **kwargs):
         await self.widget.reset(self.instance.map_manager.current_map.num_checkpoints)
         for player in self.instance.player_manager.online:
-            self.display_graph(player)
+            await self.display_graph(player)
 
 
 
