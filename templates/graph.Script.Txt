@@ -9,6 +9,7 @@
 
 main() {
 
+    declare UpdateInterval = 200;
 
 
     declare persistent lines = True;
@@ -40,9 +41,9 @@ main() {
     }
 
 
+    declare NextUpdate = CurrentTime-1;
     while (True) {
         yield;
-
 
         if (Prev_DistractionFreeMode != Net_DistractionFreeMode) {
             Prev_DistractionFreeMode = Net_DistractionFreeMode;
@@ -60,112 +61,117 @@ main() {
             }
         }
 
-        if (!PageIsVisible || GUIPlayer == Null) {
-            continue;
-        }
-
-
-        {% for i in range(num_checkpoints) %}
-            _Times["$$live"][{{i}}] = 0.0;
-        {% endfor %}
-
-        declare Integer j;
-        foreach(Time in GUIPlayer.CurRace.Checkpoints){
-            _Times["$$live"][j] = Time * 1.0;
-            j+=1;
-        }
-        if(_Times["$$live"].count > GUIPlayer.CurRace.Checkpoints.count){
-            _Times["$$live"][GUIPlayer.CurRace.Checkpoints.count] = GUIPlayer.CurRace.Time*1.0;
-        }
-
-        declare diffs = False;
-        declare Real[][Text] Times;
-
-
-        if(!diffs){
-            foreach(Run => CpTimes in _Times){
-                Times[Run] = CpTimes;
-            }
-        }else{
-            declare Real last;
-
-            foreach(Run => CpTimes in _Times){
-                last = 0.0;
-                Times[Run] = empty;
-                foreach(Time in CpTimes){
-                    Times[Run].add(Time - last);
-                    last = Time;
-                }
-            }
-        }
-
-        declare Max = 0.00001;
-        foreach(Run => CpTimes in Times){
-            if(!hide.exists(Run)){
-                foreach (Time in CpTimes) {
-                    if(Max < Time){
-                        Max = Time;
-                    }
-                }
-            }
-        }
-
-        declare Runs = ["dedi_first", "local_first", "own_dedi", "own_local", "$$live", "other_dedi", "other_local"];
-        foreach(Run in Runs){
-            declare CMlLabel Label <=> (Page.GetFirstChild(Run) as CMlLabel);
-            if(Label != Null){
-                if(!hide.exists(Run)){
-                    Label.Opacity = 1.0;
-                }else{
-                    Label.Opacity = 0.4;
-                }
-            }
-        }
-
-        declare Integer i;
-        foreach(Run => CpTimes in Times){
-            i = 0;
-            declare CMlLabel Label <=> (Page.GetFirstChild(Run) as CMlLabel);
-            foreach (Time in CpTimes) {
-                declare CMlQuad Pin <=> (Page.GetFirstChild("time_"^Run^"_"^TextLib::ToText(i)) as CMlQuad);
-                if(Pin != Null){
-                    if(Time != 0.0 && !hide.exists(Run)){
-                        Pin.Show();
-                        if(lines){
-                            Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
-                            Pin.Size.Y = 1.0;
-                            Pin.Opacity = 1.0;
-                        }else{
-                            Pin.RelativePosition_V3.Y = 0.0;
-                            Pin.Size.Y = Time * 100 / Max * 0.9;
-                            Pin.Opacity = 0.4;
-                        }
-                    }else{
-                        Pin.Hide();
-                    }
-
-                    i+=1;
-                }
-                if(Run == "$$live"){
-                    if(i == GUIPlayer.CurRace.Checkpoints.count+1){
-                        Pin.BgColor = <1.0, 0.5, 0.5>;
-                    }else{
-                        Pin.BgColor = <1.0, 0.0, 0.0>;
-                    }
-                }
-            }
-        }
-
-
         foreach(Event in PendingEvents){
             if(Event.Type == CMlScriptEvent::Type::MouseClick){
                 if(Event.ControlId == "graphbg"){
+                    NextUpdate = CurrentTime-1;
                     lines = !lines;
                 }else{
+                    NextUpdate = CurrentTime-1;
                     if(hide.exists(Event.ControlId)){
                         hide.remove(Event.ControlId);
                     }else{
                         hide.add(Event.ControlId);
+                    }
+                }
+            }
+        }
+
+        if(CurrentTime>NextUpdate){
+            NextUpdate = CurrentTime + UpdateInterval;
+
+            if (!PageIsVisible || GUIPlayer == Null) {
+                continue;
+            }
+
+
+            {% for i in range(num_checkpoints) %}
+                _Times["$$live"][{{i}}] = 0.0;
+            {% endfor %}
+
+            declare Integer j;
+            foreach(Time in GUIPlayer.CurRace.Checkpoints){
+                _Times["$$live"][j] = Time * 1.0;
+                j+=1;
+            }
+            if(_Times["$$live"].count > GUIPlayer.CurRace.Checkpoints.count){
+                _Times["$$live"][GUIPlayer.CurRace.Checkpoints.count] = GUIPlayer.CurRace.Time*1.0;
+            }
+
+            declare diffs = False;
+            declare Real[][Text] Times;
+
+
+            if(!diffs){
+                foreach(Run => CpTimes in _Times){
+                    Times[Run] = CpTimes;
+                }
+            }else{
+                declare Real last;
+
+                foreach(Run => CpTimes in _Times){
+                    last = 0.0;
+                    Times[Run] = empty;
+                    foreach(Time in CpTimes){
+                        Times[Run].add(Time - last);
+                        last = Time;
+                    }
+                }
+            }
+
+            declare Max = 0.00001;
+            foreach(Run => CpTimes in Times){
+                if(!hide.exists(Run)){
+                    foreach (Time in CpTimes) {
+                        if(Max < Time){
+                            Max = Time;
+                        }
+                    }
+                }
+            }
+
+            declare Runs = ["dedi_first", "local_first", "own_dedi", "own_local", "$$live", "other_dedi", "other_local"];
+            foreach(Run in Runs){
+                declare CMlLabel Label <=> (Page.GetFirstChild(Run) as CMlLabel);
+                if(Label != Null){
+                    if(!hide.exists(Run)){
+                        Label.Opacity = 1.0;
+                    }else{
+                        Label.Opacity = 0.4;
+                    }
+                }
+            }
+
+            declare Integer i;
+            foreach(Run => CpTimes in Times){
+                i = 0;
+                declare CMlLabel Label <=> (Page.GetFirstChild(Run) as CMlLabel);
+                foreach (Time in CpTimes) {
+                    declare CMlQuad Pin <=> (Page.GetFirstChild("time_"^Run^"_"^TextLib::ToText(i)) as CMlQuad);
+                    if(Pin != Null){
+                        if(Time != 0.0 && !hide.exists(Run)){
+                            Pin.Show();
+                            if(lines){
+                                Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
+                                Pin.Size.Y = 1.0;
+                                Pin.Opacity = 1.0;
+                            }else{
+                                Pin.RelativePosition_V3.Y = 0.0;
+                                Pin.Size.Y = Time * 100 / Max * 0.9;
+                                Pin.Opacity = 0.4;
+                            }
+                        }else{
+                            Pin.Hide();
+                        }
+
+                        i+=1;
+                    }
+                    if(Run == "$$live"){
+                        if(i == GUIPlayer.CurRace.Checkpoints.count+1){
+                            Pin.BgColor = <1.0, 0.5, 0.5>;
+                        }else{
+                            Pin.BgColor = <1.0, 0.0, 0.0>;
+                        }
                     }
                 }
             }
