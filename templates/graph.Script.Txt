@@ -91,11 +91,15 @@ main() {
 
             declare Integer j;
             foreach(Time in GUIPlayer.CurRace.Checkpoints){
-                _Times["$$live"][j] = Time * 1.0;
+                if(_Times["$$live"].existskey(j)){
+                    _Times["$$live"][j] = Time * 1.0;
+                }
                 j+=1;
             }
             if(_Times["$$live"].count > GUIPlayer.CurRace.Checkpoints.count){
-                _Times["$$live"][GUIPlayer.CurRace.Checkpoints.count] = GUIPlayer.CurRace.Time*1.0;
+                if(_Times["$$live"].existskey(GUIPlayer.CurRace.Checkpoints.count)){
+                    _Times["$$live"][GUIPlayer.CurRace.Checkpoints.count] = GUIPlayer.CurRace.Time*1.0;
+                }
             }
 
             declare diffs = False;
