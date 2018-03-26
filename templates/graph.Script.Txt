@@ -221,7 +221,7 @@ main() {
                 foreach (Time in CpTimes) {
                     declare CMlQuad Pin <=> (Page.GetFirstChild("time_"^Run^"_"^TextLib::ToText(i)) as CMlQuad);
                     if(Pin != Null){
-                        if(Time != 0.0 && !hide.exists(Run)){
+                        if(Time > 0.0 && !hide.exists(Run)){
                             Pin.Show();
                             if(!bars){
                                 Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
