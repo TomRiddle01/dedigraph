@@ -25,6 +25,17 @@
                 <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_$$live_{{loop.index0}}" valign="bottom" z-index="7" size="{{250/num_checkpoints}} 0" bgcolor="ff0000ff"/>
             {% endfor %}
 
+
+        <frame pos="250 0">
+            <label pos="0 0"  valign="center" text="- 0:00:00" id="timelabel_1" style="TextRaceChrono"/>
+            <label pos="0 30" valign="center" text="- 0:00:00" id="timelabel_2" style="TextRaceChrono"/>
+            <label pos="0 60" valign="center" text="- 0:00:00" id="timelabel_3" style="TextRaceChrono"/>
+            <label pos="0 90" valign="center" text="- 0:00:00" id="timelabel_4" style="TextRaceChrono"/>
+        </frame>
+
+
+
+
         <label pos="0 -4" z-index="2" ScriptEvents="1" id="settings_open" halign="left" valign="top" textsize="9" text="$s$fffSettings"/>
 
         <frame pos="0 -4">
@@ -60,14 +71,13 @@
 
 
                 <quad pos="102 -20"  valign="center" z-index="3" ScriptEvents="1" id="setting_bars" style="Icons64x64_1" substyle="Check" size="10 10"/>
-                <label pos="120 -20" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sUse bars"/>
+                <label pos="120 -20" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sUse bars instead of lines"/>
 
                 <quad pos="102 -35"  valign="center" z-index="3" ScriptEvents="1" id="setting_diffs" style="Icons64x64_1" substyle="Check" size="10 10"/>
                 <label pos="120 -35" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sShow Time differences"/>
 
-
-
-
+                <quad pos="102 -50"  valign="center" z-index="3" ScriptEvents="1" id="setting_hidetimes" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <label pos="120 -50" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sHide Time Axis"/>
             </frame>
         </frame>
 

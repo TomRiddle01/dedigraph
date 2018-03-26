@@ -16,6 +16,7 @@ main() {
     declare persistent Text[] hide;
     declare persistent Boolean initialized;
     declare persistent diffs = False;
+    declare persistent hidetimes = False;
 
     declare CMlFrame Settings <=> (Page.GetFirstChild("settings_popup") as CMlFrame);
     declare SettingsOpen = False;
@@ -96,6 +97,9 @@ main() {
                     if(split[0] == "setting"){
                         split.removekey(0);
                         declare type = TextLib::Join("_", split);
+                        if(type == "hidetimes"){
+                            hidetimes = !hidetimes;
+                        }
                         if(type == "bars"){
                             bars = !bars;
                         }
@@ -134,6 +138,9 @@ main() {
 
             Box <=> (Page.GetFirstChild("setting_bars") as CMlQuad);
             Box.StyleSelected = bars;
+
+            Box <=> (Page.GetFirstChild("setting_hidetimes") as CMlQuad);
+            Box.StyleSelected = hidetimes;
         }
 
         if(CurrentTime>NextUpdate){
@@ -204,6 +211,7 @@ main() {
                 }
             }
 
+
             declare Integer i;
             foreach(Run => CpTimes in Times){
                 i = 0;
@@ -237,6 +245,29 @@ main() {
                     }
                 }
             }
+
+            declare CMlLabel Time4 <=> (Page.GetFirstChild("timelabel_4") as CMlLabel);
+            declare CMlLabel Time3 <=> (Page.GetFirstChild("timelabel_3") as CMlLabel);
+            declare CMlLabel Time2 <=> (Page.GetFirstChild("timelabel_2") as CMlLabel);
+            declare CMlLabel Time1 <=> (Page.GetFirstChild("timelabel_1") as CMlLabel);
+
+            if(!hidetimes){
+                Time4.SetText("- "^TextLib::TimeToText(MathLib::NearestInteger(Max), True));
+                Time3.SetText("- "^TextLib::TimeToText(MathLib::NearestInteger(Max/3.0*2.0), True));
+                Time2.SetText("- "^TextLib::TimeToText(MathLib::NearestInteger(Max/3.0), True));
+                Time4.Show();
+                Time3.Show();
+                Time2.Show();
+                Time1.Show();
+            }else{
+                Time4.Hide();
+                Time3.Hide();
+                Time2.Hide();
+                Time1.Hide();
+            }
+
+
+
         }
     }
     {% endif %}
