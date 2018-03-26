@@ -94,29 +94,31 @@ main() {
                     diffs = !diffs;
                 }else{
                     declare split = TextLib::Split("_", Event.ControlId);
-                    if(split[0] == "setting"){
-                        split.removekey(0);
-                        declare type = TextLib::Join("_", split);
-                        if(type == "hidetimes"){
-                            hidetimes = !hidetimes;
+                    if(split.count > 0){
+                        if(split[0] == "setting"){
+                            split.removekey(0);
+                            declare type = TextLib::Join("_", split);
+                            if(type == "hidetimes"){
+                                hidetimes = !hidetimes;
+                            }
+                            if(type == "bars"){
+                                bars = !bars;
+                            }
+                            if(type == "diffs"){
+                                diffs = !diffs;
+                            }
+                            NextUpdate = CurrentTime - 1;
                         }
-                        if(type == "bars"){
-                            bars = !bars;
+                        if(split[0] == "toggle" || split[0] == "label"){
+                            split.removekey(0);
+                            declare type = TextLib::Join("_", split);
+                            if(hide.exists(type)){
+                                hide.remove(type);
+                            }else{
+                                hide.add(type);
+                            }
+                            NextUpdate = CurrentTime - 1;
                         }
-                        if(type == "diffs"){
-                            diffs = !diffs;
-                        }
-                        NextUpdate = CurrentTime - 1;
-                    }
-                    if(split[0] == "toggle" || split[0] == "label"){
-                        split.removekey(0);
-                        declare type = TextLib::Join("_", split);
-                        if(hide.exists(type)){
-                            hide.remove(type);
-                        }else{
-                            hide.add(type);
-                        }
-                        NextUpdate = CurrentTime - 1;
                     }
                 }
 

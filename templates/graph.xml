@@ -71,13 +71,13 @@
 
 
                 <quad pos="102 -20"  valign="center" z-index="3" ScriptEvents="1" id="setting_bars" style="Icons64x64_1" substyle="Check" size="10 10"/>
-                <label pos="120 -20" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sUse bars instead of lines"/>
+                <label pos="120 -20" z-index="2" halign="left" valign="center" textsize="7" text="$sUse bars instead of lines"/>
 
                 <quad pos="102 -35"  valign="center" z-index="3" ScriptEvents="1" id="setting_diffs" style="Icons64x64_1" substyle="Check" size="10 10"/>
-                <label pos="120 -35" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sShow Time differences"/>
+                <label pos="120 -35" z-index="2" halign="left" valign="center" textsize="7" text="$sShow Time differences"/>
 
                 <quad pos="102 -50"  valign="center" z-index="3" ScriptEvents="1" id="setting_hidetimes" style="Icons64x64_1" substyle="Check" size="10 10"/>
-                <label pos="120 -50" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sHide Time Axis"/>
+                <label pos="120 -50" z-index="2" halign="left" valign="center" textsize="7" text="$sHide Time Axis"/>
             </frame>
         </frame>
 
