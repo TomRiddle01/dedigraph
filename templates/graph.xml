@@ -24,21 +24,53 @@
                 <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_own_local_{{loop.index0}}" valign="bottom" z-index="0" size="{{250/num_checkpoints}} 0" bgcolor="ffffffff"/>
                 <quad pos="{{ (loop.index0 * (250/num_checkpoints)) }} 0" id="time_$$live_{{loop.index0}}" valign="bottom" z-index="7" size="{{250/num_checkpoints}} 0" bgcolor="ff0000ff"/>
             {% endfor %}
-        <label pos="0 -4" ScriptEvents="1" id="dedi_first" halign="left" valign="top" textsize="7" text="$s$f80Dedi 1"/>
-        <label pos="30 -4" ScriptEvents="1" id="local_first" halign="left" valign="top" textsize="7" text="$s$ff0Local 1"/>
-        <label pos="60 -4" ScriptEvents="1" id="own_dedi" halign="left" valign="top" textsize="7" text="$s$fffyour Dedi"/>
-        <label pos="100 -4" ScriptEvents="1" id="own_local" halign="left" valign="top" textsize="7" text="$s$fffyour Local"/>
 
-        {% if other_nick is defined %}
-            <label pos="0 -14" halign="left" valign="top" size="80 10" textsize="7" text="{{other_nick}}$z:"/>
-        {% endif %}
-        {% if "other_dedi" in cptimes %}
-            <label pos="90 -14" ScriptEvents="1" id="other_dedi" halign="left" valign="top" textsize="7" text="$s$00fDedi"/>
-        {% endif %}
-        {% if "other_local" in cptimes %}
-            <label pos="120 -14" ScriptEvents="1" id="other_local" halign="left" valign="top" textsize="7" text="$s$33fLocal"/>
-        {% endif %}
-        <label pos="145 -4" ScriptEvents="1" id="$$live" halign="left" valign="top" textsize="7" text="$s$f00live"/>
+        <label pos="0 -4" z-index="2" ScriptEvents="1" id="settings_open" halign="left" valign="top" textsize="9" text="$s$fffSettings"/>
+
+        <frame pos="0 -4">
+            <frame pos="100000 100000" id="settings_popup">
+                <quad  id="settings_popup_bg" ScriptEvents="1" pos="0 2" z-index="0" size="250 120" bgcolor="000000dd"/>
+                <label pos="248 -118" ScriptEvents="1" z-index="2" id="settings_close" halign="right" valign="bottom" textsize="7" text="$s$fffokay"/>
+
+                <quad pos="2 -20"  valign="center" z-index="3" ScriptEvents="1" id="toggle_$$live" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <quad pos="2 -35"  valign="center" z-index="3" ScriptEvents="1" id="toggle_dedi_first" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <quad pos="2 -50"  valign="center" z-index="3" ScriptEvents="1" id="toggle_local_first" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <quad pos="2 -65"  valign="center" z-index="3" ScriptEvents="1" id="toggle_own_dedi" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <quad pos="2 -80"  valign="center" z-index="3" ScriptEvents="1" id="toggle_own_local" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <quad pos="2 -95"  valign="center" z-index="3" ScriptEvents="1" id="toggle_other_dedi" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <quad pos="2 -110" valign="center" z-index="3" ScriptEvents="1" id="toggle_other_local" style="Icons64x64_1" substyle="Check" size="10 10"/>
+
+                <label pos="20 -20" z-index="2" ScriptEvents="1" id="label_$$live" halign="left" valign="center" textsize="7" text="$s$f00live"/>
+                <label pos="20 -35" z-index="2" ScriptEvents="1" id="label_dedi_first" halign="left" valign="center" textsize="7" text="$s$f80Dedi 1"/>
+                <label pos="20 -50" z-index="2" ScriptEvents="1" id="label_local_first" halign="left" valign="center" textsize="7" text="$s$ff0Local 1"/>
+                <label pos="20 -65" z-index="2" ScriptEvents="1" id="label_own_dedi" halign="left" valign="center" textsize="7" text="$s$fffyour Dedi"/>
+                <label pos="20 -80" z-index="2" ScriptEvents="1" id="label_own_local" halign="left" valign="center" textsize="7" text="$s$fffyour Local"/>
+
+                {% if "other_dedi" in cptimes %}
+                <label pos="20 -95" z-index="2" ScriptEvents="1" id="label_other_dedi" halign="left" valign="center" textsize="7" text="$s{{other_nick}}$z$11e (Dedi)"/>
+                {% else %}
+                <label pos="20 -95" z-index="2" ScriptEvents="1" id="label_other_dedi" halign="left" valign="center" textsize="7" text="$s$11dcompared Dedi$fff"/>
+                {% endif %}
+
+                {% if "other_local" in cptimes %}
+                <label pos="20 -110" z-index="2" ScriptEvents="1" id="label_other_local" halign="left" valign="center" textsize="7" text="$s{{other_nick}}$z$33f (Local)"/>
+                {% else %}
+                <label pos="20 -110" z-index="2" ScriptEvents="1" id="label_other_local" halign="left" valign="center" textsize="7" text="$s$33fcompared Local"/>
+                {% endif %}
+
+
+                <quad pos="102 -20"  valign="center" z-index="3" ScriptEvents="1" id="setting_bars" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <label pos="120 -20" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sUse bars"/>
+
+                <quad pos="102 -35"  valign="center" z-index="3" ScriptEvents="1" id="setting_diffs" style="Icons64x64_1" substyle="Check" size="10 10"/>
+                <label pos="120 -35" z-index="2" ScriptEvents="1" halign="left" valign="center" textsize="7" text="$sShow Time differences"/>
+
+
+
+
+            </frame>
+        </frame>
+
     </frame>
     {% endif %}
 {% endblock %}

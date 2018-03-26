@@ -12,9 +12,13 @@ main() {
     declare UpdateInterval = 200;
 
 
-    declare persistent lines = True;
+    declare persistent bars = True;
     declare persistent Text[] hide;
+    declare persistent Boolean initialized;
+    declare persistent diffs = False;
 
+    declare CMlFrame Settings <=> (Page.GetFirstChild("settings_popup") as CMlFrame);
+    declare SettingsOpen = False;
     declare Boolean Prev_DistractionFreeMode = False;
     declare netwrite Boolean Net_DistractionFreeMode for UI;
 
@@ -45,6 +49,8 @@ main() {
     while (True) {
         yield;
 
+
+
         if (Prev_DistractionFreeMode != Net_DistractionFreeMode) {
             Prev_DistractionFreeMode = Net_DistractionFreeMode;
 
@@ -61,20 +67,73 @@ main() {
             }
         }
 
+
+        if(!initialized){
+            // defaults
+            bars = True;
+            diffs = False;
+
+            initialized = True;
+        }
+
+
         foreach(Event in PendingEvents){
             if(Event.Type == CMlScriptEvent::Type::MouseClick){
+                if(Event.ControlId == "settings_open" || Event.ControlId == "settings_close"){
+                    if(!SettingsOpen){
+                        Settings.RelativePosition_V3 = <0.0, 0.0>;
+                        SettingsOpen = True;
+                    }else{
+                        Settings.RelativePosition_V3 = <90000.0, 90000.0>;
+                        SettingsOpen = False;
+                    }
+                }else
                 if(Event.ControlId == "graphbg"){
                     NextUpdate = CurrentTime-1;
-                    lines = !lines;
+                    diffs = !diffs;
                 }else{
-                    NextUpdate = CurrentTime-1;
-                    if(hide.exists(Event.ControlId)){
-                        hide.remove(Event.ControlId);
-                    }else{
-                        hide.add(Event.ControlId);
+                    declare split = TextLib::Split("_", Event.ControlId);
+                    if(split[0] == "setting"){
+                        split.removekey(0);
+                        declare type = TextLib::Join("_", split);
+                        if(type == "bars"){
+                            bars = !bars;
+                        }
+                        if(type == "diffs"){
+                            diffs = !diffs;
+                        }
+                        NextUpdate = CurrentTime - 1;
+                    }
+                    if(split[0] == "toggle" || split[0] == "label"){
+                        split.removekey(0);
+                        declare type = TextLib::Join("_", split);
+                        if(hide.exists(type)){
+                            hide.remove(type);
+                        }else{
+                            hide.add(type);
+                        }
+                        NextUpdate = CurrentTime - 1;
                     }
                 }
+
             }
+        }
+
+        if(SettingsOpen){
+            declare CMlQuad Box;
+            declare checkboxes = ["toggle_dedi_first", "toggle_local_first", "toggle_own_dedi", "toggle_own_local", "toggle_other_dedi", "toggle_other_local", "toggle_$$live"];
+            foreach(BoxId in checkboxes){
+               declare split = TextLib::Split("_", BoxId);
+               split.removekey(0);
+               declare type = TextLib::Join("_", split);
+               Box <=> (Page.GetFirstChild(BoxId) as CMlQuad);
+               Box.StyleSelected = !hide.exists(type);
+            }
+            Box <=> (Page.GetFirstChild("setting_diffs") as CMlQuad);
+            Box.StyleSelected = diffs;
+
+            Box <=> (Page.GetFirstChild("setting_bars") as CMlQuad);
+            Box.StyleSelected = bars;
         }
 
         if(CurrentTime>NextUpdate){
@@ -102,7 +161,6 @@ main() {
                 }
             }
 
-            declare diffs = False;
             declare Real[][Text] Times;
 
 
@@ -136,7 +194,7 @@ main() {
 
             declare Runs = ["dedi_first", "local_first", "own_dedi", "own_local", "$$live", "other_dedi", "other_local"];
             foreach(Run in Runs){
-                declare CMlLabel Label <=> (Page.GetFirstChild(Run) as CMlLabel);
+                declare CMlLabel Label <=> (Page.GetFirstChild("label_"^Run) as CMlLabel);
                 if(Label != Null){
                     if(!hide.exists(Run)){
                         Label.Opacity = 1.0;
@@ -155,7 +213,7 @@ main() {
                     if(Pin != Null){
                         if(Time != 0.0 && !hide.exists(Run)){
                             Pin.Show();
-                            if(lines){
+                            if(!bars){
                                 Pin.RelativePosition_V3.Y = Time * 100 / Max * 0.9;
                                 Pin.Size.Y = 1.0;
                                 Pin.Opacity = 1.0;
